@@ -117,9 +117,9 @@
                     <a href="#vision" class="text-sm font-semibold text-gray-300 hover:text-firefly transition-colors tracking-wide">NOSOTROS</a>
                     <a href="#proyecto" class="text-sm font-semibold text-gray-300 hover:text-firefly transition-colors tracking-wide">PRÓXIMO PROYECTO</a>
                     
-                    <a href="#apoyar" class="relative px-6 py-2.5 bg-firefly text-night font-bold text-sm rounded-full overflow-hidden group transition-all hover:shadow-[0_0_20px_rgba(253,203,88,0.4)]">
+                    <a href="#apoyar" class="relative px-6 py-2.5 bg-firefly text-center text-night font-bold text-sm rounded-full overflow-hidden group transition-all hover:shadow-[0_0_20px_rgba(253,203,88,0.4)]">
                         <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10 -ml-10 -mt-10"></span>
-                        <span class="relative">¡QUIERO AYUDAR</span>
+                        <span class="relative">¡QUIERO AYUDAR!</span>
                     </a>
                 </div>
 
@@ -128,7 +128,7 @@
                 </button>
             </div>
 
-            <div id="mobile-menu" class="md:hidden mt-4 bg-night-light/50 rounded-xl backdrop-blur-xl border border-white/10">
+            <div id="mobile-menu" class="md:hidden bg-night-light/50 rounded-xl backdrop-blur-xl border border-white/10">
                 <div class="flex flex-col space-y-4 p-6 text-center">
                     <a href="#inicio" class="text-white hover:text-firefly font-bold border-b border-white/5 pb-2 mobile-link">INICIO</a>
                     <a href="#vision" class="text-white hover:text-firefly font-bold border-b border-white/5 pb-2 mobile-link">NOSOTROS</a>
@@ -192,7 +192,7 @@
                     </p>
                 </div>
 
-                <div class="glass-panel p-10 rounded-[2rem] relative group hover:-translate-y-3 hover:scale-[1.02] hover:border-firefly/50 hover:shadow-[0_0_30px_rgba(253,203,88,0.2)] hover:bg-night-light/40 transition-all duration-500 md:mt-12" data-aos="fade-left">
+                <div class="glass-panel p-10 rounded-[2rem] relative group hover:-translate-y-3 hover:scale-[1.02] hover:border-firefly/50 hover:shadow-[0_0_30px_rgba(253,203,88,0.2)] hover:bg-night-light/40 transition-all duration-500 md:mt-12">
                     <div class="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-bl from-blue-500 to-night-light rounded-2xl flex items-center justify-center shadow-lg transform -rotate-6 group-hover:-rotate-12 group-hover:scale-110 transition-transform duration-500 border border-white/20">
                         <i class="fas fa-bullseye text-white text-3xl"></i>
                     </div>
@@ -397,9 +397,11 @@
             if (mobileMenu.classList.contains('open')) {
                 icon.classList.remove('fa-bars');
                 icon.classList.add('fa-times');
+                mobileMenu.classList.add('mt-4');
             } else {
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
+                mobileMenu.classList.remove('mt-4');
             }
         });
 
