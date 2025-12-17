@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luciérnagas Nocturnas | Esperanza y Bienestar</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;0,900;1,300&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'night': '#0F253E',
+                        'night-light': '#1B3B5F',
+                        'firefly': '#FDCB58',
+                        'firefly-light': '#FFE082',
+                    },
+                    fontFamily: {
+                        serif: ['Merriweather', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .logo-glow {
+            filter: drop-shadow(0 0 8px rgba(253, 203, 88, 0.5)) drop-shadow(0 0 2px rgba(255, 255, 255, 0.8));
+            transition: filter 0.3s ease;
+        }
+        .group:hover .logo-glow {
+            filter: drop-shadow(0 0 12px rgba(253, 203, 88, 0.8)) drop-shadow(0 0 4px rgba(255, 255, 255, 1));
+        }
+
+        .glass-panel {
+            background: rgba(15, 37, 62, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(253, 203, 88, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* Transición suave para todos los cambios */
+        }
+        
+        .hero-bg {
+            /* Luces de navidad y calidez hogareña */
+            background-image: linear-gradient(to bottom, rgba(15, 37, 62, 0.9), rgba(15, 37, 62, 0.9)), url('https://images.unsplash.com/photo-1543589077-47d81606c1bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        #mobile-menu.open {
+            max-height: 400px;
+            opacity: 1;
+        }
+
+        #backToTop {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #FDCB58;
+            color: #0F253E;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body class="bg-night text-gray-100 font-sans antialiased overflow-x-hidden selection:bg-firefly selection:text-night relative">
+
+    <nav class="fixed w-full z-50 bg-night/80 backdrop-blur-lg border-b border-white/5 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#inicio" class="flex items-center group">
+                    <img src="./assets/logo-sin-bg.png" alt="Luciérnagas Logo" class="h-12 w-auto mr-3 logo-glow transform group-hover:scale-110 transition-transform duration-300">
+                    <span class="text-xl md:text-2xl font-serif font-bold text-white group-hover:text-firefly transition-colors duration-300 tracking-tight">
+                        Luciérnagas<span class="text-firefly">.</span>
+                    </span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#vision" class="text-sm font-semibold text-gray-300 hover:text-firefly transition-colors tracking-wide">NOSOTROS</a>
+                    <a href="#proyecto" class="text-sm font-semibold text-gray-300 hover:text-firefly transition-colors tracking-wide">PROYECTO 2025</a>
+                    
+                    <a href="#apoyar" class="relative px-6 py-2.5 bg-firefly text-night font-bold text-sm rounded-full overflow-hidden group transition-all hover:shadow-[0_0_20px_rgba(253,203,88,0.4)]">
+                        <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10 -ml-10 -mt-10"></span>
+                        <span class="relative">¡QUIERO AYUDAR</span>
+                    </a>
+                </div>
+
+                <button id="menu-btn" class="md:hidden text-2xl text-firefly hover:text-white transition-colors focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+
+            <div id="mobile-menu" class="md:hidden mt-4 bg-night-light/50 rounded-xl backdrop-blur-xl border border-white/10">
+                <div class="flex flex-col space-y-4 p-6 text-center">
+                    <a href="#inicio" class="text-white hover:text-firefly font-bold border-b border-white/5 pb-2 mobile-link">INICIO</a>
+                    <a href="#vision" class="text-white hover:text-firefly font-bold border-b border-white/5 pb-2 mobile-link">NOSOTROS</a>
+                    <a href="#proyecto" class="text-white hover:text-firefly font-bold border-b border-white/5 pb-2 mobile-link">PROYECTO 2025</a>
+                    <a href="#apoyar" class="text-firefly font-bold bg-white/5 py-3 rounded-lg mobile-link">¡QUIERO AYUDAR!</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header id="inicio" class="hero-bg min-h-screen flex items-center justify-center text-center px-6 pt-24 relative overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-firefly/20 rounded-full blur-[128px] pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/20 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="inline-block mb-6 px-4 py-1.5 rounded-full border border-firefly/30 bg-firefly/10 backdrop-blur-sm" data-aos="fade-down">
+                <span class="text-firefly text-xs md:text-sm font-bold tracking-widest uppercase">✨ Iluminando Vidas</span>
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-serif font-black mb-8 leading-tight text-white drop-shadow-xl" data-aos="fade-up" data-aos-duration="1000">
+                Un faro de esperanza entre la <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-firefly to-yellow-200 relative inline-block pb-2">
+                    bondad y la dificultad
+                    <svg class="absolute bottom-0 left-0 w-full h-3 text-firefly" viewBox="0 0 100 10" preserveAspectRatio="none">
+                        <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none" opacity="0.8" />
+                    </svg>
+                </span>
+            </h1>
+            
+            <p class="text-lg md:text-2xl mb-12 text-blue-100/90 font-light max-w-3xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                Gestionamos ayuda humanitaria integral para llevar luz, calor y recursos a quienes atraviesan sus momentos más oscuros.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4" data-aos="fade-up" data-aos-delay="400">
+                <a href="#proyecto" class="w-full sm:w-auto px-8 py-4 bg-firefly text-night font-bold text-lg rounded-full shadow-[0_0_30px_rgba(253,203,88,0.4)] hover:bg-white hover:scale-105 transition-all duration-300">
+                    Ver Campaña Actual
+                </a>
+                <a href="#vision" class="w-full sm:w-auto px-8 py-4 bg-white/5 border border-white/20 text-white font-semibold text-lg rounded-full hover:bg-white/10 hover:border-firefly/50 hover:text-firefly transition-all duration-300 backdrop-blur-sm">
+                    <i class="fas fa-play-circle mr-2"></i> Nuestra Historia
+                </a>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce text-white/50">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </header>
+
+    <section id="vision" class="py-24 bg-night relative">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-16">
+                <div class="glass-panel p-10 rounded-[2rem] relative group hover:-translate-y-3 hover:scale-[1.02] hover:border-firefly/50 hover:shadow-[0_0_30px_rgba(253,203,88,0.2)] hover:bg-night-light/40 transition-all duration-500" data-aos="fade-right">
+                    <div class="absolute -top-6 -left-6 w-20 h-20 bg-gradient-to-br from-firefly to-orange-400 rounded-2xl flex items-center justify-center shadow-lg transform rotate-6 group-hover:rotate-12 group-hover:scale-110 transition-transform duration-500">
+                        <i class="fas fa-eye text-night text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-serif font-bold text-white mt-8 mb-4 group-hover:text-firefly transition-colors">Nuestra Visión</h2>
+                    <p class="text-gray-300 leading-relaxed text-lg group-hover:text-white transition-colors">
+                        Convertirnos en el puente indiscutible entre quienes desean ayudar y quienes necesitan ayuda, creando un ecosistema de solidaridad transparente y eficaz.
+                    </p>
+                </div>
+
+                <div class="glass-panel p-10 rounded-[2rem] relative group hover:-translate-y-3 hover:scale-[1.02] hover:border-firefly/50 hover:shadow-[0_0_30px_rgba(253,203,88,0.2)] hover:bg-night-light/40 transition-all duration-500 md:mt-12" data-aos="fade-left">
+                    <div class="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-bl from-blue-500 to-night-light rounded-2xl flex items-center justify-center shadow-lg transform -rotate-6 group-hover:-rotate-12 group-hover:scale-110 transition-transform duration-500 border border-white/20">
+                        <i class="fas fa-bullseye text-white text-3xl"></i>
+                    </div>
+                    <h2 class="text-3xl font-serif font-bold text-white mt-8 mb-4 text-right md:text-left group-hover:text-firefly transition-colors">Nuestra Misión</h2>
+                    <p class="text-gray-300 leading-relaxed text-lg text-right md:text-left group-hover:text-white transition-colors">
+                        Ejecutar campañas de alto impacto que provean no solo bienes materiales (ropa, alimentos), sino también soporte emocional (juguetes, compañía) a niños en situación vulnerable.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="proyecto" class="py-24 bg-night-light relative overflow-hidden">
+        <div class="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+            <div class="absolute top-[20%] left-[10%] w-2 h-2 bg-firefly rounded-full animate-ping opacity-75"></div>
+            <div class="absolute top-[60%] right-[20%] w-1.5 h-1.5 bg-firefly rounded-full animate-pulse opacity-50"></div>
+            <div class="absolute bottom-[10%] left-[30%] w-2 h-2 bg-firefly rounded-full animate-bounce opacity-25"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center max-w-5xl mx-auto mb-16" data-aos="fade-down">
+                <span class="text-firefly font-bold tracking-[0.2em] uppercase text-xs mb-3 block">Próximo Evento Confirmado</span>
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Hospital Ana Francisca Pérez de León</h2>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-lg text-gray-300 mb-8">
+                    <span class="flex items-center"><i class="fas fa-map-marker-alt text-firefly mr-2"></i> Caracas, Venezuela</span>
+                    <span class="hidden md:inline text-firefly">•</span>
+                    <span class="flex items-center"><i class="far fa-calendar-alt text-firefly mr-2"></i> 27 de Diciembre, 2025</span>
+                    <span class="hidden md:inline text-firefly">•</span>
+                    <span class="flex items-center"><i class="far fa-clock text-firefly mr-2"></i> 10:00 a.m.</span>
+                </div>
+                
+                <p class="text-gray-300 max-w-2xl mx-auto"><strong>Meta:</strong> Entregar platos navideños, juguetes y ropa nueva a los pacientes del área de pediatría para llevar esperanza en estos tiempos decembrinos.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-20" id="countdown-wrapper">
+                <div class="bg-night/50 backdrop-blur border border-white/10 rounded-2xl p-6 text-center shadow-2xl">
+                    <span id="days" class="block text-4xl md:text-6xl font-bold text-firefly font-sans">00</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Días</span>
+                </div>
+                <div class="bg-night/50 backdrop-blur border border-white/10 rounded-2xl p-6 text-center shadow-2xl">
+                    <span id="hours" class="block text-4xl md:text-6xl font-bold text-white font-sans">00</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Horas</span>
+                </div>
+                <div class="bg-night/50 backdrop-blur border border-white/10 rounded-2xl p-6 text-center shadow-2xl">
+                    <span id="minutes" class="block text-4xl md:text-6xl font-bold text-white font-sans">00</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest">Minutos</span>
+                </div>
+                <div class="bg-night/50 backdrop-blur border border-white/10 rounded-2xl p-6 text-center shadow-2xl relative overflow-hidden">
+                    <div class="absolute inset-0 bg-firefly/10 animate-pulse"></div>
+                    <span id="seconds" class="block text-4xl md:text-6xl font-bold text-firefly font-sans relative z-10">00</span>
+                    <span class="text-xs text-gray-400 uppercase tracking-widest relative z-10">Segundos</span>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-panel p-8 rounded-2xl text-center group hover:bg-white/5 transition duration-300" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-16 h-16 mx-auto bg-gray-700/50 rounded-full flex items-center justify-center text-2xl text-firefly mb-6 group-hover:scale-110 group-hover:bg-firefly group-hover:text-night transition-all">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Ropa Nueva</h3>
+                    <p class="text-sm text-gray-400">Dignidad a través de prendas de vestir a estrenar.</p>
+                </div>
+                <div class="glass-panel p-8 rounded-2xl text-center group hover:bg-white/5 transition duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 mx-auto bg-gray-700/50 rounded-full flex items-center justify-center text-2xl text-firefly mb-6 group-hover:scale-110 group-hover:bg-firefly group-hover:text-night transition-all">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Juguetes</h3>
+                    <p class="text-sm text-gray-400">Alegría para reducir el estrés hospitalario.</p>
+                </div>
+                <div class="glass-panel p-8 rounded-2xl text-center group hover:bg-white/5 transition duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 mx-auto bg-gray-700/50 rounded-full flex items-center justify-center text-2xl text-firefly mb-6 group-hover:scale-110 group-hover:bg-firefly group-hover:text-night transition-all">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Alimentos</h3>
+                    <p class="text-sm text-gray-400">Nutrición especializada y platos navideños.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="apoyar" class="py-24 bg-gradient-to-b from-night to-[#0a1a2e]">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Tu ayuda es la luz</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Selecciona la modalidad con la que prefieras impactar hoy.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                
+                <div class="bg-night-light/30 border border-white/5 p-8 rounded-3xl hover:border-firefly/50 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="0">
+                    <div class="flex items-center justify-between mb-8">
+                        <i class="fas fa-truck-pickup text-4xl text-gray-500 group-hover:text-firefly transition-colors"></i>
+                        <span class="bg-gray-800 text-xs px-3 py-1 rounded-full text-gray-300">Recolección</span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Donar Insumos</h3>
+                    <p class="text-gray-400 text-sm mb-8">
+                        No te preocupes por el transporte. <strong>Nosotros los buscamos en toda Caracas.</strong> Nos encargamos de la logística de búsqueda, almacenamiento y entrega.
+                        <br><br>
+                        <i class="fas fa-info-circle text-firefly mr-1"></i> Si prefieres entregarlo personalmente, ¡también es posible! Contáctanos.
+                    </p>
+                    <a href="https://wa.me/584162000247?text=Hola%0AQuisiera%20coordinar%20una%20*Donaci%C3%B3n%20de%20Insumos*." target="_blank" class="block w-full py-3 text-center border border-gray-600 rounded-xl text-gray-300 hover:border-firefly hover:text-firefly transition-colors font-semibold">
+                        <i class="fab fa-whatsapp mr-1"></i> Solicitar Recolección
+                    </a>
+                </div>
+
+                <div class="relative bg-gradient-to-b from-gray-800 to-night p-8 rounded-3xl border border-firefly shadow-[0_0_30px_rgba(253,203,88,0.15)] transform md:-translate-y-4 z-10" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="absolute top-0 right-0 bg-firefly text-night font-bold text-xs px-4 py-1 rounded-bl-xl rounded-tr-2xl">RECOMENDADO</div>
+                    <div class="flex items-center justify-between mb-6">
+                        <i class="fas fa-heart text-4xl text-firefly animate-pulse"></i>
+                        <h3 class="text-2xl font-bold text-white">Aporte Económico</h3>
+                    </div>
+                    
+                    <p class="text-gray-300 text-sm mb-6">Haz clic en los datos para copiarlos y luego repórtalo en WhatsApp.</p>
+                    
+                    <div onclick="copyToClipboard('0105 Mercantil\n04162000247\nV27748601')" class="bg-black/40 rounded-xl p-4 mb-4 border border-white/5 cursor-pointer hover:bg-white/5 transition-colors relative group/copy">
+                        <span class="absolute top-2 right-2 text-[10px] text-firefly opacity-0 group-hover/copy:opacity-100 transition-opacity"><i class="fas fa-copy mr-1"></i>Copiar</span>
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-mobile-alt text-firefly mr-2"></i>
+                            <p class="text-xs text-gray-400 uppercase font-bold">Pago Móvil</p>
+                        </div>
+                        <p class="text-white font-bold">Mercantil (0105)</p>
+                        <p class="text-firefly font-mono text-lg tracking-wide">0416-2000247</p>
+                        <p class="text-gray-400 text-sm">C.I: V-27.748.601</p>
+                    </div>
+
+                    <div onclick="copyToClipboard('01050655721655031058\nV27748601')" class="bg-black/40 rounded-xl p-4 mb-6 border border-white/5 cursor-pointer hover:bg-white/5 transition-colors relative group/copy">
+                        <span class="absolute top-2 right-2 text-[10px] text-firefly opacity-0 group-hover/copy:opacity-100 transition-opacity"><i class="fas fa-copy mr-1"></i>Copiar</span>
+                        <div class="flex items-center mb-2">
+                            <i class="fas fa-university text-firefly mr-2"></i>
+                            <p class="text-xs text-gray-400 uppercase font-bold">Transferencia</p>
+                        </div>
+                        <p class="text-white font-bold text-sm">Banco Mercantil - Corriente</p>
+                        <p class="text-white font-mono text-sm break-all my-1">01050655721655031058</p>
+                        <p class="text-gray-400 text-xs">C.I: V-27.748.601</p>
+                    </div>
+
+                    <a href="https://wa.me/584162000247?text=Hola%0AAcabo%20de%20realizar%20una%20*Donaci%C3%B3n*%20para%20la%20Organizaci%C3%B3n%20Luci%C3%A9rnagas.%0AEl%20*N%C3%BAmero%20de%20Referencia*%20de%20la%20operaci%C3%B3n%20es%3A%20" target="_blank" class="block w-full py-4 bg-firefly text-night rounded-xl text-center font-bold hover:bg-firefly-light hover:shadow-lg transition-all shadow-firefly/20">
+                        <i class="fab fa-whatsapp mr-2 text-lg"></i> Reportar Donación
+                    </a>
+                </div>
+
+                <div class="bg-night-light/30 border border-white/5 p-8 rounded-3xl hover:border-firefly/50 transition-all duration-300 group" data-aos="fade-up" data-aos-delay="200">
+                    <div class="flex items-center justify-between mb-8">
+                        <i class="fas fa-hands-helping text-4xl text-gray-500 group-hover:text-firefly transition-colors"></i>
+                        <div class="flex gap-1">
+                            <span class="bg-gray-800 text-xs px-2 py-1 rounded-full text-gray-300">Presencial</span>
+                            <span class="bg-firefly/20 border border-firefly/50 text-xs px-2 py-1 rounded-full text-firefly">Virtual</span>
+                        </div>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Ser Voluntario</h3>
+                    <p class="text-gray-400 text-sm mb-8">
+                        Apoya en la entrega, recepcion o almacenamiento de forma presencial o <strong>únete de forma virtual</strong> ayudando en redes sociales, diseño y gestión. ¡Todo suma!
+                    </p>
+                    <a href="https://wa.me/584162000247?text=Hola%0AQuisiera%20inscribirme%20como%20*Voluntario*%20en%20la%20organizaci%C3%B3n." target="_blank" class="block w-full py-3 text-center border border-gray-600 rounded-xl text-gray-300 hover:border-firefly hover:text-firefly transition-colors font-semibold">
+                        <i class="fab fa-whatsapp mr-1"></i> Inscribirme
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#050f1a] pt-16 pb-8 border-t border-white/5">
+        <div class="container mx-auto px-6 flex flex-col items-center">
+            <div class="mb-8">
+                <img src="./assets/logo-sin-bg.png" alt="Logo" class="h-16 w-auto logo-glow opacity-90">
+            </div>
+            <div class="flex space-x-8 mb-8">
+                <a href="https://www.instagram.com/orgluciernagas.ve/" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-firefly hover:text-night transition-all"><i class="fab fa-instagram"></i></a>
+                <a href="https://wa.me/584162000247" target="_blank" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-firefly hover:text-night transition-all"><i class="fab fa-whatsapp"></i></a>
+                <a href="mailto:luciernagasnocturnas.ve@gmail.com" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-firefly hover:text-night transition-all"><i class="fas fa-envelope"></i></a>
+            </div>
+            <p class="text-gray-600 text-sm text-center">
+                &copy; 2025 Luciérnagas Nocturnas. ¡Faros de esperanza!.
+            </p>
+        </div>
+    </footer>
+
+    <button id="backToTop" class="fixed bottom-8 right-8 z-50 bg-firefly text-night w-12 h-12 md:w-14 md:h-14 rounded-full shadow-[0_0_20px_rgba(253,203,88,0.5)] hover:bg-white hover:scale-110 flex items-center justify-center opacity-0 translate-y-10 pointer-events-none" aria-label="Volver arriba">
+        <i class="fas fa-arrow-up text-lg md:text-xl font-bold"></i>
+    </button>
+
+    <div id="toast"><i class="fas fa-check-circle mr-2"></i>¡Datos copiados al portapapeles!</div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            offset: 50,
+            duration: 800,
+            easing: 'ease-out-cubic',
+        });
+
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('open');
+            const icon = menuBtn.querySelector('i');
+            if (mobileMenu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                menuBtn.querySelector('i').classList.remove('fa-times');
+                menuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        const navbar = document.getElementById('navbar');
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-night/95', 'shadow-lg');
+                navbar.classList.remove('bg-night/80');
+            } else {
+                navbar.classList.remove('bg-night/95', 'shadow-lg');
+                navbar.classList.add('bg-night/80');
+            }
+
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+                backToTopBtn.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            } else {
+                backToTopBtn.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+                backToTopBtn.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        const countDownDate = new Date("Dec 27, 2025 10:00:00").getTime(); 
+        const countdownFunction = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerHTML = days < 10 ? "0"+days : days;
+            document.getElementById("hours").innerHTML = hours < 10 ? "0"+hours : hours;
+            document.getElementById("minutes").innerHTML = minutes < 10 ? "0"+minutes : minutes;
+            document.getElementById("seconds").innerHTML = seconds < 10 ? "0"+seconds : seconds;
+
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                document.getElementById("countdown-wrapper").innerHTML = "<div class='col-span-4 text-center text-4xl font-bold text-firefly'>¡LLEGÓ EL DÍA!</div>";
+            }
+        }, 1000);
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                var toast = document.getElementById("toast");
+                toast.className = "show";
+                setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+            }, function(err) {
+                console.error('No se pudo copiar el texto: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
